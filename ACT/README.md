@@ -14,7 +14,7 @@ python setup_demos.py ACT
 This downloads the model files to:
 
 ```sh
-models/nchristo-synaptics/ACT-example/
+models/Synaptics/ACT/
 ```
 
 namely the three NSS modules (`backbone_fused.vmfb`, `enc4_dattn.vmfb`, `decoder_ffn.vmfb`),
@@ -28,7 +28,7 @@ Run the demo from the `ACT` directory:
 ```sh
 cd ACT
 python src/run.py                                            # uses the bundled sample frame
-python src/run.py -m ../models/nchristo-synaptics/ACT-example      # explicit model dir
+python src/run.py -m ../models/Synaptics/ACT      # explicit model dir
 python src/run.py --image img.bin --state state.bin          # your own pre-normalized inputs
 ```
 
@@ -47,11 +47,11 @@ decoder_ffn.vmfb      decoder FFN + action head -> action                      N
 denormalize           action * a_std + a_mean -> physical joint targets
 ```
 
-The pre-encoder host glue (state input-projection `D→512`, latent+state+300-image token concat,
+The pre-encoder host glue (state input-projection `D->512`, latent+state+300-image token concat,
 additive sin/cos positional embedding) is reproduced in pure numpy and was verified bit-for-bit
 against the original onnx subgraph; its constants live in `glue_params.npz` (`Ws, bs, latent, pos`,
 plus `a_mean, a_std, D`). The board needs only `torq-runtime`, `numpy`, and `ml_dtypes` (all in the
-torq-examples venv) — no onnxruntime.
+torq-examples venv) -- no onnxruntime.
 
 > [!NOTE]
 > Inputs are raw `.bin` (C-order): image = int16 NHWC `[1,480,640,3]`
@@ -60,5 +60,5 @@ torq-examples venv) — no onnxruntime.
 > venv's `torq.runtime.VMFBInferenceRunner` (device `torq`; `--torq_hw_type=astra_machina` is set
 > automatically).
 
-Validated on an AstraCORAL-2619 board: ≈390 ms on the NSS (backbone 141 / enc+xattn 221 /
-dec_ffn 11 ms), reproducing a recorded demonstration to ≈0.14 % of joint range.
+Validated on an AstraCORAL-2619 board: ~390 ms on the NSS (backbone 141 / enc+xattn 221 /
+dec_ffn 11 ms), reproducing a recorded demonstration to ~0.14 % of joint range.

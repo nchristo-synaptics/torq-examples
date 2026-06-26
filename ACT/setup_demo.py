@@ -21,7 +21,7 @@ from utils.download import (
 logger = logging.getLogger("ACT.setup")
 
 _HF_REPO_MAP: Final[dict[str, str]] = {
-    "default": "nchristo-synaptics/ACT-example",
+    "default": "Synaptics/ACT",
 }
 DEFAULT_REPO: Final[str] = _HF_REPO_MAP["default"]
 
