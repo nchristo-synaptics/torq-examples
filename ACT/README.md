@@ -17,11 +17,25 @@ This downloads the model files to:
 models/Synaptics/ACT/
 ```
 
-namely the three NSS modules (`backbone_fused.vmfb`, `enc4_dattn.vmfb`, `decoder_ffn.vmfb`),
-`glue_params.npz` (the pre-encoder host-glue constants + action denorm stats), and a bundled sample
-input frame.
+The model is optimized as the three separate NSS modules (`backbone_fused.vmfb`, `enc4_dattn.vmfb`,
+`decoder_ffn.vmfb`), and includes `glue_params.npz` (the pre-encoder host-glue constants + action
+denorm stats) and a bundled sample input frame.
 
 ## Running
+
+Note: we highly recommend configuring the chip for best performance as below.
+```sh
+for p in /sys/devices/system/cpu/cpufreq/policy*; do
+  echo performance > "$p/scaling_governor"
+done
+
+# verify
+for p in /sys/devices/system/cpu/cpufreq/policy*; do
+  echo -n "$p: "; cat "$p/scaling_governor" "$p/scaling_cur_freq"
+done
+
+devmem 0xf7e104b0 32 0x216
+```
 
 Run the demo from the `ACT` directory:
 
